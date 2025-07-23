@@ -4,7 +4,7 @@ export type MenuItem = {
   id: string;
   name: string;
   price: number;
-  isAvailable: boolean;
+  stock: number;
   imageUrl?: string;
   categoryId: string;
   createdAt: string;
@@ -25,5 +25,4 @@ export type MenuItemPayload = Omit<MenuItemPreview, 'id'>;
 
 export type MenuItemQueryParams = {
   categoryId?: string;
-  isAvailable?: boolean;
 }

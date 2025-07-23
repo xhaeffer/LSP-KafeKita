@@ -11,7 +11,6 @@ export const GET = async (req: NextRequest) => {
   const { searchParams } = new URL(req.url);
   const params: MenuItemQueryParams = {
     categoryId: searchParams.get("categoryId") || undefined,
-    isAvailable: searchParams.get("isAvailable") === "true" ? true : undefined,
   }
 
   const menu = await getMenuItems(params);
@@ -29,10 +28,7 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
   }
 
-  const result = await createMenuItem({
-    ...parsed.data,
-    isAvailable: true
-  });
+  const result = await createMenuItem(parsed.data);
   
   return NextResponse.json(result, { status: 201 });
 };

@@ -3,6 +3,7 @@ import { Timestamp } from "firebase-admin/firestore";
 import { db } from "../firebase-admin";
 
 import { OrderItem, OrderItemPayload } from "@/types/orderItem";
+import { getMenuItemsBulk, updateMenuItem } from "./menuItems.service";
 
 const COLLECTION = 'order_items';
 
@@ -14,7 +15,7 @@ export const createOrderItems = async (data: OrderItemPayload[]) => {
 
   const ids: string[] = [];
 
-  data.forEach(item => {
+  data.forEach(async (item) => {
     const docRef = colRef.doc();
     ids.push(docRef.id);
     batch.set(docRef, {
@@ -22,10 +23,12 @@ export const createOrderItems = async (data: OrderItemPayload[]) => {
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
     });
+
+    const menuItems = await getMenuItemsBulk([item.menuItemId])
+    await updateMenuItem(item.menuItemId, {stock: menuItems[0].stock - item.quantity}) 
   });
 
   await batch.commit();
-
   return ids.map(id => ({ id }));
 };
 

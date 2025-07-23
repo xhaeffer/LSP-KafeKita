@@ -16,14 +16,10 @@ const COLLECTION = 'menu_items';
 const generateMenuQuery = (params: MenuItemQueryParams) => {
   let queryRef = db
     .collection(COLLECTION)
-    .select('name', 'price', 'isAvailable', 'imageUrl', 'categoryId') as Query;
+    .select('name', 'price', 'stock', 'imageUrl', 'categoryId') as Query;
 
   if (params.categoryId) {
     queryRef = queryRef.where('categoryId', '==', params.categoryId);
-  }
-
-  if (params.isAvailable !== undefined) {
-    queryRef = queryRef.where('isAvailable', '==', params.isAvailable);
   }
 
   return queryRef;
