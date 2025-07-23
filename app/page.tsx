@@ -58,7 +58,7 @@ export default function KioskMenu() {
     try {
       loader.start()
 
-      const res = await fetch(`/api/menu?${categoryId ? `categoryId=${categoryId}&` : ''}isAvailable=true`)
+      const res = await fetch(`/api/menu?${categoryId ? `categoryId=${categoryId}&` : ''}`)
       if (!res.ok) {
         const errorData = await res.json()
         throw new Error(errorData.message || "Failed to fetch menu items")
@@ -124,11 +124,21 @@ export default function KioskMenu() {
   const updateOrderItem = (id: string, delta: number) => {
     setOrderState(prev => ({
       ...prev,
-      items: prev.items.map(item =>
-        item.menuItemId === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
-      )
-    }))
-  }
+      items: prev.items
+        .map(item => {
+          if (item.menuItemId !== id) return item;
+
+          const menu = menuState.allItems.find((menu) => menu.id === item.menuItemId)!
+          if (item.quantity < menu.stock) return null
+
+          const newQuantity = item.quantity + delta;
+          if (newQuantity <= 0) return null;
+
+          return { ...item, quantity: newQuantity };
+        })
+        .filter(item => item !== null)
+    }));
+  };
 
   const updateNote = (id: string, note: string) => {
     setOrderState(prev => ({

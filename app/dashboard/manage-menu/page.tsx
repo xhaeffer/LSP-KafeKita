@@ -23,8 +23,6 @@ import {
   SelectContent,
   SelectItem
 } from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
 
 import { authFetch } from "@/lib/authFetch"
 import { MenuItem } from "@/types/menuItem"
@@ -39,10 +37,10 @@ const ManageMenu = () => {
   const [form, setForm] = useState({
     id: "",
     name: "",
-    price: "",
+    price: 1000,
+    stock: 0,
     imageUrl: "",
     categoryId: "",
-    isAvailable: true
   })
 
   const [dialogVisible, setDialogVisible] = useState(false)
@@ -99,10 +97,10 @@ const ManageMenu = () => {
         method,
         body: JSON.stringify({
           name: form.name,
-          price: Number(form.price),
+          price: form.price,
+          stock: form.stock,
           imageUrl: form.imageUrl || undefined,
           categoryId: form.categoryId,
-          isAvailable: form.isAvailable
         })
       })
 
@@ -115,10 +113,10 @@ const ManageMenu = () => {
       setForm({
         id: "",
         name: "",
-        price: "",
+        price: 0,
+        stock: 0,
         imageUrl: "",
         categoryId: "",
-        isAvailable: true
       })
       
       toast.success(isEdit ? "Perubahan disimpan" : "Menu ditambahkan")
@@ -161,10 +159,10 @@ const ManageMenu = () => {
     setForm({
       id: menu?.id || "",
       name: menu?.name || "",
-      price: menu?.price.toString() || "",
+      price: menu?.price || 1000,
+      stock: menu?.stock || 0,
       imageUrl: menu?.imageUrl || "",
       categoryId: menu?.categoryId || "",
-      isAvailable: menu?.isAvailable || true
     })
     setDialogVisible(true)
   }
@@ -186,8 +184,8 @@ const ManageMenu = () => {
             <TableHead>Gambar</TableHead>
             <TableHead>Nama</TableHead>
             <TableHead>Harga</TableHead>
+            <TableHead>Stok</TableHead>
             <TableHead>Kategori</TableHead>
-            <TableHead>Status</TableHead>
             <TableHead className="text-right">Aksi</TableHead>
           </TableRow>
         </TableHeader>
@@ -204,14 +202,8 @@ const ManageMenu = () => {
               </TableCell>
               <TableCell>{menu.name}</TableCell>
               <TableCell>Rp {menu.price.toLocaleString("id-ID")}</TableCell>
+              <TableCell>{menu.stock}</TableCell>
               <TableCell>{getCategoryName(menu.categoryId)}</TableCell>
-              <TableCell>
-                {menu.isAvailable ? (
-                  <span className="text-green-500">Tersedia</span>
-                ) : (
-                  <span className="text-red-500">Tidak Tersedia</span>
-                )}
-              </TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
                   <Button size="sm" variant="outline" onClick={() => openDialog(menu)}>
@@ -244,8 +236,9 @@ const ManageMenu = () => {
             <Input
               placeholder="Harga"
               type="number"
+              min={1}
               value={form.price}
-              onChange={e => setForm({ ...form, price: e.target.value })}
+              onChange={e => setForm({ ...form, price: Number(e.target.value) })}
               required
             />
             <Input
@@ -267,14 +260,14 @@ const ManageMenu = () => {
                 ))}
               </SelectContent>
             </Select>
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="isAvailable"
-                checked={form.isAvailable}
-                onCheckedChange={val => setForm({ ...form, isAvailable: val })}
-              />
-              <Label htmlFor="isAvailable">{form.isAvailable ? "Tersedia" : "Tidak Tersedia"}</Label>
-            </div>
+            <Input
+              placeholder="Stok"
+              type="number"
+              min={1}
+              value={form.stock}
+              onChange={e => setForm({ ...form, stock: Number(e.target.value) })}
+              required
+            />
             <Button type="submit" className="w-full" disabled={loading}>
               {form.id ? "Simpan Perubahan" : "Tambah Menu"}
             </Button>

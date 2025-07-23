@@ -86,12 +86,14 @@ const MenuSection = ({
           {menuState.filteredItems.map(item => (
             <Card
               key={item.id}
-              onClick={() => setSelectedItemData({ item, quantity: 1 })}
-              className={`cursor-pointer w-full max-w-3xs max-h-52
+              onClick={() => item.stock > 0 && setSelectedItemData({ item, quantity: 1 })}
+              className={`w-full max-w-3xs max-h-60
                 ${selectedItemData.item === item ? "border-black border-2" : ""}
+                ${item.stock === 0 ? "grayscale-100" : "cursor-pointer"}
               `}
             >
               <CardContent className="flex flex-col items-center justify-center h-full p-2 sm:p-4 text-center">
+                <span className="mb-4 font-bold">Stock: {item.stock}</span>
                 {item.imageUrl ? (
                   <img
                     src={item.imageUrl}
