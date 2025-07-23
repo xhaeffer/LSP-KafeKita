@@ -7,7 +7,7 @@ export type Order = {
   id: string;
   status: OrderStatus;
   paymentMethod: OrderPaymentMethod;
-  tableNumber: string;
+  tableNumber: number;
   totalPrice: number;
   cashierId?: string;
   createdAt: string;

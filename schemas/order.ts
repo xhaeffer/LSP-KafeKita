@@ -7,7 +7,7 @@ export const OrderItemPayloadSchema = z.object({
 });
 
 export const OrderPayloadSchema = z.object({
-  tableNumber: z.string().min(1),
+  tableNumber: z.number().min(1),
   paymentMethod: z.enum(["cash", "card", "qris"]),
   status: z.enum(["pending", "confirmed"]).default("pending"),
   items: z.array(OrderItemPayloadSchema).min(1),

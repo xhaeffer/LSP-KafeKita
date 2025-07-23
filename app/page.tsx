@@ -33,7 +33,7 @@ export default function KioskMenu() {
 
   const [orderState, setOrderState] = useState({
     items: [] as OrderItemPreview[],
-    tableNumber: "1",
+    tableNumber: 1,
     paymentMethod: "cash" as OrderPaymentMethod,
   })
 

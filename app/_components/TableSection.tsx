@@ -2,8 +2,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
 type TableSectionProps = {
-  tableNumber: string
-  setTableNumber: (val: string) => void
+  tableNumber: number
+  setTableNumber: (val: number) => void
   cancel: () => void
   proceed: () => void
 }
@@ -19,7 +19,7 @@ const TableSection = ({
       <h1 className="text-3xl font-bold mb-4">Table Number</h1>
       <Input
         value={tableNumber}
-        onChange={e => setTableNumber(e.target.value)}
+        onChange={e => setTableNumber(Number(e.target.value))}
         
         className="text-center sm:text-2xl md:text-2xl w-24 h-12 mb-8"
       />
