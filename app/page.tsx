@@ -14,6 +14,7 @@ import MenuSection from "./_components/MenuSection"
 import OrderSection from "./_components/OrderSection"
 import TableSection from "./_components/TableSection"
 import PaymentSection from "./_components/PaymentSection"
+import { openInvoiceHtml } from "@/components/invoice"
 
 import { authFetch } from "@/lib/authFetch"
 
@@ -182,6 +183,11 @@ export default function KioskMenu() {
 
     setOrderState({ items: [], tableNumber: 1, paymentMethod: "cash" })
     setStep("menu")
+
+    const res = await authFetch("/api/orders/" + orderId.id)
+    const order = await res.json() as OrderWithItems
+
+    openInvoiceHtml(order)
   }
 
   useEffect(() => {
