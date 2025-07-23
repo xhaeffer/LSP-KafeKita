@@ -5,7 +5,7 @@ import { updateOrder } from "@/lib/services/orders.service";
 
 import { OrderStatusUpdateSchema } from "@/schemas/order";
 
-export const PATCH = async (req: NextRequest, { params }: { params: { id: string } }) => {
+export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   const user = await requireRole(req, ["admin", "kitchen", "cashier"]);
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
@@ -16,6 +16,8 @@ export const PATCH = async (req: NextRequest, { params }: { params: { id: string
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
   }
 
-  await updateOrder(params.id, { status: parsed.data.status });
+  const { id } = await params;
+  await updateOrder(id, { status: parsed.data.status });
+  
   return NextResponse.json({ success: true });
 };

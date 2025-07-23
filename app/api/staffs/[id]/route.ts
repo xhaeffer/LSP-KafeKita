@@ -4,15 +4,17 @@ import { requireRole } from "@/lib/auth";
 import { getStaff, updateStaff, deleteStaff } from "@/lib/services/staff.service";
 import { StaffPatchPayloadSchema } from "@/schemas/staff";
 
-export const GET = async (req: NextRequest, { params }: { params: { id: string } }) => {
+export const GET = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   const user = await requireRole(req, ["admin"]);
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
-  const staff = await getStaff(params.id);
+  const { id } = await params;
+  const staff = await getStaff(id);
+
   return NextResponse.json(staff);
 };
 
-export const PATCH = async (req: NextRequest, { params }: { params: { id: string } }) => {
+export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   const user = await requireRole(req, ["admin"]);
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
@@ -23,14 +25,18 @@ export const PATCH = async (req: NextRequest, { params }: { params: { id: string
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
   }
 
-  await updateStaff(params.id, parsed.data);
+  const { id } = await params;
+  await updateStaff(id, parsed.data);
+
   return NextResponse.json({ success: true });
 };
 
-export const DELETE = async (req: NextRequest, { params }: { params: { id: string } }) => {
+export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   const user = await requireRole(req, ["admin"]);
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
-  await deleteStaff(params.id);
+  const { id } = await params;
+  await deleteStaff(id);
+
   return NextResponse.json({ success: true });
 };

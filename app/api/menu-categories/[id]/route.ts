@@ -5,7 +5,7 @@ import { deleteMenuCategory, updateMenuCategory } from "@/lib/services/menuCateg
 
 import { MenuCategorPatchPayloadSchema } from "@/schemas/menuCategories";
 
-export const PATCH = async (req: NextRequest, { params }: { params: { id: string } }) => {
+export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   const user = await requireRole(req, ["admin"]);
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
@@ -16,14 +16,18 @@ export const PATCH = async (req: NextRequest, { params }: { params: { id: string
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
   }
 
-  await updateMenuCategory(params.id, parsed.data);
+  const { id } = await params;
+  await updateMenuCategory(id, parsed.data);
+
   return NextResponse.json({ success: true });
 };
 
-export const DELETE = async (req: NextRequest, { params }: { params: { id: string } }) => {
+export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   const user = await requireRole(req, ["admin"]);
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
-  await deleteMenuCategory(params.id);
+  const { id } = await params;
+  await deleteMenuCategory(id);
+  
   return NextResponse.json({ success: true });
 };
