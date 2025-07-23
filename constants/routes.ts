@@ -18,4 +18,5 @@ export const DEFAULT_ROUTES: Record<StaffRole, string> = {
   admin: "/dashboard/sales",
   cashier: "/dashboard/cashier",
   kitchen: "/dashboard/kitchen",
+  waitress: "/dashboard/kitchen"
 };

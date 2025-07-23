@@ -42,5 +42,12 @@ export const NAVIGATION_BY_ROLE = {
       url: "/dashboard/kitchen",
       icon: IconDashboard,
     }
+  ],
+  waitress: [
+    {
+      title: "Kitchen Dashboard",
+      url: "/dashboard/kitchen",
+      icon: IconDashboard,
+    }
   ]
 }
