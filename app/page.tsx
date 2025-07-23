@@ -1,18 +1,21 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Swal from 'sweetalert2'
 import { toast } from "sonner"
 import { useTopLoader } from "nextjs-toploader"
 
 import { OrderItemPreview } from "@/types/orderItem"
 import { MenuCategoryPreview } from "@/types/menuCategories"
 import { MenuItemPreviewWithCategory } from "@/types/menuItem"
-import { OrderPayload, OrderPaymentMethod } from "@/types/order"
+import { OrderPayload, OrderPaymentMethod, OrderWithItems } from "@/types/order"
 
 import MenuSection from "./_components/MenuSection"
 import OrderSection from "./_components/OrderSection"
 import TableSection from "./_components/TableSection"
 import PaymentSection from "./_components/PaymentSection"
+
+import { authFetch } from "@/lib/authFetch"
 
 export default function KioskMenu() {
   const loader = useTopLoader()
@@ -90,7 +93,6 @@ export default function KioskMenu() {
         throw new Error(errorData.message || "Failed to create order")
       }
 
-      toast.success("Pesanan berhasil dibuat")
       return await res.json()
     } catch (error) {
       console.error("Error creating order:", error)
@@ -157,9 +159,28 @@ export default function KioskMenu() {
       items: orderState.items,
     }
 
-    await createOrder(payload)
+    const orderId = await createOrder(payload)
+    if (orderId && payload.status === "pending") {
+      Swal.fire({
+        title: 'Transaksi berhasil',
+        text: 'Silahkan menuju kasir untuk melanjutkan transaksi!',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+        timer: 5000
+      })
+    }
 
-    setOrderState({ items: [], tableNumber: "1", paymentMethod: "cash" })
+    if (orderId && payload.status === "confirmed") {
+      Swal.fire({
+        title: 'Transaksi berhasil',
+        text: 'Pesananmu akan kami proses!',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        timer: 5000
+      })
+    }
+
+    setOrderState({ items: [], tableNumber: 1, paymentMethod: "cash" })
     setStep("menu")
   }
 
