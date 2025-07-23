@@ -7,7 +7,7 @@ import {
 import { getAuth } from "firebase-admin/auth"
 import { getFirestore } from "firebase-admin/firestore"
 
-import serviceAccountKey from "../firebase_service_account.json"
+const serviceAccountKey = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT as string);
 
 if (!getApps().length) {
   initializeApp({
