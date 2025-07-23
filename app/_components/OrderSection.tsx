@@ -73,7 +73,7 @@ const OrderSection = ({
         <Button variant="secondary" className="text-xl py-6" onClick={cancel}>
           Cancel
         </Button>
-        <Button className="text-xl py-6" onClick={proceed}>
+        <Button className="text-xl py-6" onClick={proceed} disabled={orderItems.length === 0}>
           Proceed
         </Button>
       </div>

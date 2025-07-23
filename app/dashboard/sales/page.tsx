@@ -90,14 +90,14 @@ export default function SalesSummarySection() {
       ) : (
         <>
           <Card className="p-6 space-y-2">
-            <h2 className="text-lg font-semibold">Total Penjualan Hari Ini</h2>
+            <h2 className="text-lg font-semibold">Total Penjualan Minggu Ini</h2>
             <div className="text-2xl font-bold">
               Rp {total.toLocaleString("id-ID")}
             </div>
           </Card>
 
           <Card className="p-6 space-y-2">
-            <h2 className="text-lg font-semibold">Top Menu Hari Ini</h2>
+            <h2 className="text-lg font-semibold">Top Menu Minggu Ini</h2>
             {topItems.length === 0 ? (
               <p className="text-muted-foreground">Belum ada transaksi hari ini.</p>
             ) : (

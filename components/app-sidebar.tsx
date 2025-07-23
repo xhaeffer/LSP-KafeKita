@@ -39,9 +39,7 @@ export function AppSidebar({ staffProfile, onSignOut, ...props }: AppSidebarProp
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">KafeKita</span>
-              </a>
+                <IconInnerShadowTop className="!size-5" />KafeKita</a>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
